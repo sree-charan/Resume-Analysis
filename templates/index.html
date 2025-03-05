@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #4CC9F0;
+            --accent: #F72585;
+            --text-dark: #333;
+            --text-light: #666;
+            --background: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --border-radius: 12px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 30px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .tagline {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+        
+        .card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+        
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--background);
+            border: 2px dashed #ccc;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-input-label:hover {
+            border-color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .file-input-label span {
+            display: block;
+            margin-top: 10px;
+            color: var(--text-light);
+        }
+        
+        input[type="file"] {
+            position: absolute;
+            font-size: 100px;
+            opacity: 0;
+            right: 0;
+            top: 0;
+            cursor: pointer;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            background-color: var(--white);
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 200px;
+            transition: border 0.3s ease;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
+        }
+        
+        button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(67, 97, 238, 0.4);
+        }
+        
+        .file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--primary);
+            display: none;
+        }
+        
+        .supported-formats {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Resume Analyzer</h1>
+            <p class="tagline">Match your resume with job descriptions and get detailed feedback</p>
+        </header>
+        
+        <div class="card">
+            <form action="/process" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="resume">Upload Resume</label>
+                    <div class="file-input-container">
+                        <label for="resume" class="file-input-label">
+                            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 14.9861C11 15.5384 11.4477 15.9861 12 15.9861C12.5523 15.9861 13 15.5384 13 14.9861V7.82831L16.2428 11.0711C16.6333 11.4616 17.2665 11.4616 17.657 11.0711C18.0475 10.6806 18.0475 10.0474 17.657 9.65692L12.7071 4.70703C12.3166 4.31651 11.6834 4.31651 11.2929 4.70703L6.34315 9.65691C5.95262 10.0474 5.95262 10.6806 6.34315 11.0711C6.73367 11.4616 7.36684 11.4616 7.75736 11.0711L11 7.82847V14.9861Z" fill="#4361ee"/>
+                                <path d="M4 14H6V18H18V14H20V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V14Z" fill="#4361ee"/>
+                            </svg>
+                            <span>Drag and drop your resume here, or click to browse</span>
+                        </label>
+                        <input type="file" id="resume" name="resume" accept=".pdf,.docx" required>
+                        <div class="file-name" id="file-name"></div>
+                        <div class="supported-formats">Supported formats: PDF, DOCX</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="job_description">Job Description</label>
+                    <textarea id="job_description" name="job_description" placeholder="Paste the job description here..." required></textarea>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button type="submit">Analyze Resume</button>
+                    <div style="margin-top: 20px;">
+                        <a href="{{ url_for('list_results') }}" class="secondary-button" style="background-color: var(--white); color: var(--primary); border: 1px solid var(--primary); border-radius: 30px; padding: 10px 20px; font-size: 0.9rem; font-weight: 500; text-decoration: none; display: inline-block; transition: all 0.3s ease;">View Past Analysis Results</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Display file name when selected
+        document.getElementById('resume').addEventListener('change', function(e) {
+            const fileName = e.target.files[0].name;
+            document.getElementById('file-name').textContent = fileName;
+            document.getElementById('file-name').style.display = 'block';
+        });
+    </script>
+</body>
+</html>

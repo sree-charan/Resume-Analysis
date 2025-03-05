@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #4CC9F0;
+            --accent: #F72585;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #d32f2f;
+            --info: #2196F3;
+            --text-dark: #333;
+            --text-light: #666;
+            --background: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --border-radius: 12px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 30px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+            font-size: 1.5rem;
+        }
+        
+        h3 {
+            color: var(--text-dark);
+            font-weight: 500;
+            margin: 15px 0 10px 0;
+        }
+        
+        .error {
+            background-color: #fdecea;
+            border-left: 5px solid var(--danger);
+            color: var(--danger);
+            padding: 15px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .score-pill {
+            background-color: var(--primary);
+            color: var(--white);
+            border-radius: 30px;
+            padding: 8px 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .recommendation-pill {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--white);
+            margin-top: 15px;
+        }
+        
+        .recommendation-high {
+            background-color: var(--success);
+        }
+        
+        .recommendation-moderate {
+            background-color: var(--warning);
+        }
+        
+        .recommendation-alternative {
+            background-color: var(--info);
+        }
+        
+        .recommendation-decline {
+            background-color: var(--danger);
+        }
+        
+        .chart-container {
+            width: 100%;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: var(--border-radius);
+        }
+        
+        img.chart {
+            display: block;
+            width: 100%;
+            max-width: 700px;
+            height: auto;
+            margin: 0 auto;
+            border-radius: 8px;
+        }
+        
+        .chart-caption {
+            text-align: center;
+            font-style: italic;
+            color: var(--text-light);
+            margin: 15px 0 20px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 0.9rem;
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        
+        .content-section {
+            margin-bottom: 25px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background-color: #e3f2fd;
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin: 3px;
+        }
+        
+        .badge.matched {
+            background-color: #e8f5e9;
+            color: var(--success);
+        }
+        
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+        
+        .experience-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .experience-item h4 {
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        .experience-item .company {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .experience-item .duration {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+        
+        .education-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .education-item:last-child {
+            border-bottom: none;
+        }
+        
+        .job-description {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            position: relative;
+            margin: 15px 0;
+            white-space: pre-line;
+        }
+        
+        .collapsible-section {
+            margin-bottom: 20px;
+        }
+        
+        .collapsible-header {
+            background-color: #f1f3f9;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .collapsible-content {
+            display: none;
+            padding: 15px;
+            background-color: white;
+            border: 1px solid #eee;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        button.action-button {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-block;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
+        }
+        
+        button.action-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(67, 97, 238, 0.4);
+        }
+        
+        .action-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        a.button {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-block;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
+            text-decoration: none;
+        }
+        
+        a.button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(67, 97, 238, 0.4);
+        }
+        
+        a.secondary-button {
+            background-color: var(--white);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 30px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-block;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        a.secondary-button:hover {
+            background-color: #f1f3f9;
+            transform: translateY(-2px);
+        }
+        
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        
+        .tab.active {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .json-container {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 14px;
+            font-family: Monaco, Consolas, "Andale Mono", monospace;
+        }
+        
+        .score-category {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .score-category h4 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .category-score {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .score-explanation {
+            font-style: italic;
+            color: var(--text-light);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Resume Analysis Results</h1>
+        </header>
+        
+        {% if error %}
+        <div class="card">
+            <p class="error">{{ error }}</p>
+            <div class="action-buttons">
+                <a href="/" class="button">Try Again</a>
+            </div>
+        </div>
+        {% else %}
+        
+        <!-- Score Summary Card -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Resume Fit Score</h2>
+                <div class="score-pill">
+                    {% if json_output.get('fit_score') %}
+                        {% if json_output.fit_score.get('education_score') is defined %}
+                            {{ json_output.fit_score.get('total_score', 0) }}/25
+                        {% else %}
+                            {{ json_output.fit_score.get('total_score', 0) }}/100
+                        {% endif %}
+                    {% else %}
+                        0/25
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if json_output.get('fit_score') and json_output.fit_score.get('recommendation') %}
+            <div style="text-align: center;">
+                {% if json_output.fit_score.recommendation == "Top Candidate" %}
+                <div class="recommendation-pill recommendation-high">{{ json_output.fit_score.recommendation }}</div>
+                {% elif json_output.fit_score.recommendation == "Strong Candidate" %}
+                <div class="recommendation-pill recommendation-moderate">{{ json_output.fit_score.recommendation }}</div>
+                {% elif json_output.fit_score.recommendation == "Potential Candidate" %}
+                <div class="recommendation-pill recommendation-alternative">{{ json_output.fit_score.recommendation }}</div>
+                {% elif json_output.fit_score.recommendation == "Not Recommended" %}
+                <div class="recommendation-pill recommendation-decline">{{ json_output.fit_score.recommendation }}</div>
+                {% elif json_output.fit_score.recommendation == "Highly Interested" %}
+                <div class="recommendation-pill recommendation-high">{{ json_output.fit_score.recommendation }}</div>
+                {% elif json_output.fit_score.recommendation == "Interview After Top Candidates" %}
+                <div class="recommendation-pill recommendation-alternative">{{ json_output.fit_score.recommendation }}</div>
+                {% elif json_output.fit_score.recommendation == "Moderately Interested" %}
+                <div class="recommendation-pill recommendation-moderate">{{ json_output.fit_score.recommendation }}</div>
+                {% elif json_output.fit_score.recommendation == "Decline" %}
+                <div class="recommendation-pill recommendation-decline">{{ json_output.fit_score.recommendation }}</div>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            <!-- Chart -->
+            <div class="chart-container">
+                {% if chart_image %}
+                <img src="data:image/png;base64,{{ chart_image }}" alt="Fit Score Chart" class="chart">
+                <p class="chart-caption">
+                    {% if json_output.get('fit_score') and json_output.fit_score.get('education_score') is defined %}
+                    The chart shows the candidate's fit score breakdown across five key categories, each scored from 1 to 5, for a maximum total of 25 points.
+                    {% else %}
+                    The chart shows the candidate's fit score breakdown. Numbers atop each bar indicate the score out of the maximum for each category.
+                    {% endif %}
+                </p>
+                {% else %}
+                <p>Chart not available</p>
+                {% endif %}
+            </div>
+            
+            <!-- Detailed Scores -->
+            {% if json_output.get('fit_score') %}
+                {% if json_output.fit_score.get('education_score') is defined %}
+                <!-- New 25-point scoring system -->
+                <div style="margin: 20px 0;">
+                    <h3>Detailed Score Breakdown</h3>
+                    
+                    <div class="score-category">
+                        <h4>
+                            <span>Educational Background</span>
+                            <span class="category-score">{{ json_output.fit_score.get('education_score', 0) }}/5</span>
+                        </h4>
+                        {% if json_output.fit_score.get('score_explanations') and json_output.fit_score.score_explanations.get('education_score') %}
+                        <div class="score-explanation">{{ json_output.fit_score.score_explanations.education_score }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="score-category">
+                        <h4>
+                            <span>Technical Skills Overview</span>
+                            <span class="category-score">{{ json_output.fit_score.get('technical_skills_score', 0) }}/5</span>
+                        </h4>
+                        {% if json_output.fit_score.get('score_explanations') and json_output.fit_score.score_explanations.get('technical_skills_score') %}
+                        <div class="score-explanation">{{ json_output.fit_score.score_explanations.technical_skills_score }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="score-category">
+                        <h4>
+                            <span>Relevant Experience</span>
+                            <span class="category-score">{{ json_output.fit_score.get('experience_score', 0) }}/5</span>
+                        </h4>
+                        {% if json_output.fit_score.get('score_explanations') and json_output.fit_score.score_explanations.get('experience_score') %}
+                        <div class="score-explanation">{{ json_output.fit_score.score_explanations.experience_score }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="score-category">
+                        <h4>
+                            <span>Interest in Advanced Technologies</span>
+                            <span class="category-score">{{ json_output.fit_score.get('advanced_tech_score', 0) }}/5</span>
+                        </h4>
+                        {% if json_output.fit_score.get('score_explanations') and json_output.fit_score.score_explanations.get('advanced_tech_score') %}
+                        <div class="score-explanation">{{ json_output.fit_score.score_explanations.advanced_tech_score }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="score-category">
+                        <h4>
+                            <span>Soft Skills and Personal Attributes</span>
+                            <span class="category-score">{{ json_output.fit_score.get('soft_skills_score', 0) }}/5</span>
+                        </h4>
+                        {% if json_output.fit_score.get('score_explanations') and json_output.fit_score.score_explanations.get('soft_skills_score') %}
+                        <div class="score-explanation">{{ json_output.fit_score.score_explanations.soft_skills_score }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Improvement Areas -->
+                    {% if json_output.fit_score.get('improvement_areas') and json_output.fit_score.improvement_areas|length > 0 %}
+                    <div class="score-category" style="border-left: 4px solid var(--warning);">
+                        <h4>
+                            <span>Areas for Improvement</span>
+                        </h4>
+                        <div class="score-explanation">
+                            <ul style="padding-left: 20px;">
+                                {% for area in json_output.fit_score.improvement_areas %}
+                                <li>{{ area }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% else %}
+                <!-- Old 100-point scoring system -->
+                <div style="margin: 20px 0;">
+                    <h3>Detailed Score Breakdown</h3>
+                    
+                    <div class="score-category">
+                        <h4>
+                            <span>Skills Match</span>
+                            <span class="category-score">{{ json_output.fit_score.get('skills_score', 0) }}/40</span>
+                        </h4>
+                        {% if json_output.fit_score.get('matching_skills') %}
+                        <div class="score-explanation">
+                            <p>{{ json_output.fit_score.matching_skills|length }} out of {{ json_output.job_description.keywords|default([])|length }} required skills matched</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="score-category">
+                        <h4>
+                            <span>Experience Relevance</span>
+                            <span class="category-score">{{ json_output.fit_score.get('experience_score', 0) }}/40</span>
+                        </h4>
+                        {% if json_output.fit_score.get('experience_keywords') %}
+                        <div class="score-explanation">
+                            <p>{{ json_output.fit_score.experience_keywords|length }} out of {{ json_output.job_description.keywords|default([])|length }} keywords found in experience</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="score-category">
+                        <h4>
+                            <span>Qualifications Match</span>
+                            <span class="category-score">{{ json_output.fit_score.get('qualifications_score', 0) }}/20</span>
+                        </h4>
+                        {% if json_output.fit_score.get('matching_qualifications') is defined and json_output.job_description is defined and json_output.job_description.qualifications is defined %}
+                        <div class="score-explanation">
+                            <p>{{ json_output.fit_score.matching_qualifications }} out of {{ json_output.job_description.qualifications|length }} qualifications matched</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            {% else %}
+            <div class="error" style="margin-top: 20px;">
+                No scoring data available. This could be due to an error in analyzing the resume or a missing fit_score section in the API response.
+            </div>
+            {% endif %}
+            
+            <!-- Action buttons -->
+            <div class="action-buttons">
+                <button onclick="toggleTab('resume-tab')" class="action-button">View Resume Details</button>
+                <button onclick="toggleTab('job-tab')" class="action-button">View Job Match</button>
+                <a href="/" class="button">Analyze Another Resume</a>
+                <a href="{{ url_for('list_results') }}" class="secondary-button">View All Results</a>
+            </div>
+        </div>
+        
+        <!-- Tab Content -->
+        <div id="resume-tab" class="tab-content">
+            <!-- Resume Profile Section -->
+            <div class="card">
+                <h2>Resume Profile</h2>
+                
+                <div class="grid-container">
+                    <div>
+                        <div class="content-section">
+                            <!-- <h3>Personal Information</h3> -->
+                            {% if json_output.name %}
+                                <p><strong>Name:</strong> {{ json_output.name }}</p>
+                                {% if json_output.contact_information %}
+                                <p><strong>Contact:</strong> 
+                                    {% if json_output.contact_information.email %}
+                                        Email: {{ json_output.contact_information.email }}
+                                    {% endif %}
+                                    {% if json_output.contact_information.phone %}
+                                        | Phone: {{ json_output.contact_information.phone }}
+                                    {% endif %}
+                                    {% if json_output.contact_information.linkedin %}
+                                        | LinkedIn: {{ json_output.contact_information.linkedin }}
+                                    {% endif %}
+                                </p>
+                                {% endif %}
+                                
+                                {% if json_output.summary %}
+                                <h3>Summary</h3>
+                                <p>{{ json_output.summary }}</p>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="content-section">
+                            <!-- <h3>Skills</h3> -->
+                            {% if json_output.skills and json_output.skills|length > 0 %}
+                            <div class="skills-container">
+                                {% for skill in json_output.skills %}
+                                    <span class="badge">{{ skill }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dynamic Resume Sections -->
+                {% if json_output.work_experience and json_output.work_experience|length > 0 %}
+                <div class="content-section">
+                    <h3>Work Experience</h3>
+                    {% for exp in json_output.work_experience %}
+                        <div class="experience-item">
+                            <h4>{{ exp.role }}</h4>
+                            <p class="company">{{ exp.company }}</p>
+                            <p class="duration">{{ exp.duration }}</p>
+                            <p>{{ exp.description }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if json_output.education and json_output.education|length > 0 %}
+                <div class="content-section">
+                    <h3>Education</h3>
+                    {% for edu in json_output.education %}
+                        <div class="education-item">
+                            <h4>{{ edu.degree }}</h4>
+                            <p>{{ edu.institution }} ({{ edu.year }})</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if json_output.certifications and json_output.certifications|length > 0 %}
+                <div class="content-section">
+                    <h3>Certifications</h3>
+                    <div class="skills-container">
+                        {% for cert in json_output.certifications %}
+                            <span class="badge">{{ cert }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if json_output.projects and json_output.projects|length > 0 %}
+                <div class="content-section">
+                    <h3>Projects</h3>
+                    {% for project in json_output.projects %}
+                        <div class="experience-item">
+                            <h4>{{ project.title }}</h4>
+                            <p class="duration">{{ project.duration }}</p>
+                            <p>{{ project.description }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <!-- Handle any additional sections -->
+                {% for key, value in json_output.items() %}
+                    {% if key not in ['name', 'contact_information', 'summary', 'skills', 'work_experience', 'education', 'certifications', 'projects', 'job_description', 'fit_score'] and value %}
+                        <div class="content-section">
+                            <h3>{{ key|replace('_', ' ')|title }}</h3>
+                            {% if value is string %}
+                                <p>{{ value }}</p>
+                            {% elif value is mapping %}
+                                {% for item_key, item_value in value.items() %}
+                                    <p><strong>{{ item_key|replace('_', ' ')|title }}:</strong> {{ item_value }}</p>
+                                {% endfor %}
+                            {% elif value is sequence and value is not string %}
+                                {% if value[0] is mapping %}
+                                    {% for item in value %}
+                                        <div class="experience-item">
+                                            {% for item_key, item_value in item.items() %}
+                                                {% if loop.first %}
+                                                    <h4>{{ item_value }}</h4>
+                                                {% else %}
+                                                    <p>{{ item_value }}</p>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="skills-container">
+                                        {% for item in value %}
+                                            <span class="badge">{{ item }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Job Match Section -->
+        <div id="job-tab" class="tab-content">
+            <div class="card">
+                <h2>Job Matching Analysis</h2>
+                
+                {% if json_output.get('fit_score') %}
+                <div class="content-section">
+                    <h3>Overall Match Score</h3>
+                    <div class="score-category">
+                        <h4>
+                            <span>Match Score</span>
+                            <span class="category-score">
+                                {% if json_output.fit_score.get('education_score') is defined %}
+                                    {{ json_output.fit_score.get('total_score', 0) }}/25
+                                {% else %}
+                                    {{ json_output.fit_score.get('total_score', 0) }}/100
+                                {% endif %}
+                            </span>
+                        </h4>
+                        {% if json_output.fit_score.get('recommendation') %}
+                        <div class="score-explanation">
+                            <p><strong>Recommendation:</strong> {{ json_output.fit_score.recommendation }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="grid-container">
+                    <div>
+                        {% if (json_output.skills or (json_output.resume and json_output.resume.Skills)) and (json_output.job_description or json_output.Job_Keywords_and_Required_Qualifications or json_output.job_keywords_and_qualifications) %}
+                        <div class="content-section">
+                            <h3>Skills Match</h3>
+                            {% set matched_skills = {} %}
+                            {% set unmatched_skills = {} %}
+                            {% set skills = json_output.skills if json_output.skills else (json_output.resume.Skills if json_output.resume else []) %}
+                            {% set keywords = (json_output.job_description.keywords if json_output.job_description else 
+                                           (json_output.Job_Keywords_and_Required_Qualifications.keywords if json_output.Job_Keywords_and_Required_Qualifications else
+                                           (json_output.job_keywords_and_qualifications.keywords if json_output.job_keywords_and_qualifications else []))) %}
+                            
+                            {% for skill in skills %}
+                                {% set skill_lower = skill|lower %}
+                                {% set matched = false %}
+                                {% for keyword in keywords %}
+                                    {% set keyword_lower = keyword|lower %}
+                                    {% if not matched and (skill_lower == keyword_lower or skill_lower in keyword_lower or keyword_lower in skill_lower) %}
+                                        {% if skill not in matched_skills %}
+                                            {% set _ = matched_skills.update({skill: true}) %}
+                                        {% endif %}
+                                        {% set matched = true %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if not matched and skill not in unmatched_skills %}
+                                    {% set _ = unmatched_skills.update({skill: true}) %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if matched_skills %}
+                            <div class="score-category">
+                                <h4>Matching Skills</h4>
+                                <div class="skills-container">
+                                    {% for skill in matched_skills.keys()|sort %}
+                                        <span class="badge matched">{{ skill }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            {% if unmatched_skills %}
+                            <div class="score-category">
+                                <h4>Additional Skills</h4>
+                                <div class="skills-container">
+                                    {% for skill in unmatched_skills.keys()|sort %}
+                                        <span class="badge">{{ skill }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="content-section">
+                            <h3>Required Job Skills</h3>
+                            <div class="score-category">
+                                <div class="skills-container">
+                                    {% set processed_keywords = {} %}
+                                    {% for keyword in keywords %}
+                                        {% if keyword not in processed_keywords %}
+                                            {% set matched = false %}
+                                            {% set keyword_lower = keyword|lower %}
+                                            {% for skill in skills %}
+                                                {% set skill_lower = skill|lower %}
+                                                {% if not matched and (skill_lower == keyword_lower or skill_lower in keyword_lower or keyword_lower in skill_lower) %}
+                                                    {% set matched = true %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            
+                                            {% if matched %}
+                                                <span class="badge matched">{{ keyword }}</span>
+                                            {% else %}
+                                                <span class="badge">{{ keyword }}</span>
+                                            {% endif %}
+                                            {% set _ = processed_keywords.update({keyword: true}) %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                {% if json_output.fit_score.get('matching_skills') %}
+                                <div class="score-explanation">
+                                    <p>{{ matched_skills|length }} out of {{ processed_keywords|length }} required skills matched</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        {% if json_output.job_description and json_output.job_description.qualifications %}
+                        <div class="content-section">
+                            <h3>Required Qualifications</h3>
+                            <div class="score-category">
+                                <ul style="list-style: none; padding-left: 0;">
+                                    {% for qualification in json_output.job_description.qualifications %}
+                                        <li style="margin-bottom: 8px;">
+                                            <span style="display: inline-block; width: 20px; text-align: center; margin-right: 8px;">
+                                                {% if qualification in json_output.get('matching_qualifications', []) %}
+                                                    <span style="color: var(--success);">✓</span>
+                                                {% else %}
+                                                    <span style="color: var(--text-light);">•</span>
+                                                {% endif %}
+                                            </span>
+                                            {{ qualification }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                {% if json_output.fit_score.get('qualifications_score') %}
+                                <div class="score-explanation">
+                                    <p>Qualifications Match Score: {{ json_output.fit_score.qualifications_score }}/20</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if json_output.fit_score.get('improvement_areas') %}
+                        <div class="content-section">
+                            <h3>Areas for Improvement</h3>
+                            <div class="score-category" style="border-left: 4px solid var(--warning);">
+                                <ul style="padding-left: 20px;">
+                                    {% for area in json_output.fit_score.improvement_areas %}
+                                        <li>{{ area }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="content-section">
+                            <h3>Job Description</h3>
+                            <div class="collapsible-section">
+                                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                                    <span>View Job Description</span>
+                                    <span>+</span>
+                                </div>
+                                <div class="collapsible-content">
+                                    <div class="job-description">{{ job_description }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Raw JSON Data (Hidden by Default) -->
+        <div class="card">
+            <div class="collapsible-section">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>View Raw JSON Data</span>
+                    <span>+</span>
+                </div>
+                <div class="collapsible-content">
+                    <div class="json-container">
+                        <pre>{{ json_output | tojson(indent=4) }}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <script>
+        // Initialize - show resume tab by default
+        document.getElementById('resume-tab').style.display = "block";
+        
+        function toggleTab(tabId) {
+            // Hide all tabs
+            var tabs = document.getElementsByClassName('tab-content');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
+            }
+            
+            // Show selected tab
+            document.getElementById(tabId).style.display = "block";
+        }
+        
+        function toggleCollapsible(element) {
+            var content = element.nextElementSibling;
+            var icon = element.querySelector('span:last-child');
+            
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                icon.textContent = "+";
+            } else {
+                content.style.display = "block";
+                icon.textContent = "−";
+            }
+        }
+    </script>
+</body>
+</html>
